@@ -1,6 +1,14 @@
 from django import forms
 
-from pages.models import Teachers, Grades ,Students,Subjects,Users,Absences # On importe vos modèles ici
+from pages.models import Teachers, Grades ,Students,Subjects,Users,Absences,contact_message # On importe vos modèles ici
+
+class contact_message_Form(forms.ModelForm):
+
+    class Meta:
+        model = contact_message       # 1. On dit à Django quel modèle utiliser
+        fields = '__all__'  
+   
+   
 
 # Formulaire pour le modèle Grade
 class GradeForm(forms.ModelForm):# methode django pour creer des formulaire

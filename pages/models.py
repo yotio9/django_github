@@ -10,6 +10,9 @@ class contact_message(models.Model):
     )
     is_treated=models.BooleanField(default=False)
 
+    def __str__(self):
+        return f"{self.name} - {self.email}"
+
 class Users(models.Model):
    name=models.CharField(max_length=100)
    role=models.CharField(max_length=100)

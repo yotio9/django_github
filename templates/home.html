@@ -2,15 +2,20 @@
 
 
  {%block content%}
-    <h1> bien</h1>
-    <h1> bonjour {{nom}}</h1>
-    <p>vous avez {{age}}</p>
-    <h2>vos couleurs</h2>
-    <p>
+    <h2> bonjour, {{nom}}!</h2>
+    {%if est_connecte. %}
+        <p>vous est_connecter.</p>
+    {%else%}
+        <p> veuillez vous est_connecter.<p> 
+    {%endif%}  
+    
+    
+    <h2>vos {{couleurs}}couleurs preferées:</h2>
+
+    <ul>
         {% for couleur in couleurs %}
-             <li>{{couleur}}</li>
-        {%empty%}
+             <li>{{couleur}}</li>{% empty %}
             <li>vous n'avez pas de couleur</li>
         {%endfor%}             
-    </p>
+    </ul>
 {% endblock%} 

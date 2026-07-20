@@ -1,8 +1,15 @@
 {% extends "base.html" %}
 {% block content%}
-<p>messages des contat</p>
-{% if message_list %}
+<p>message de contact</p>
+{% for i in donnes %}
+<div>
+    <h5>{{i.name}} -{{i.email}}</h5>
+    <p>{{i.message}}</p>
+
+</div>
+
+{% endfor %}
 <ul>
-    
+    <li> 
 </ul>
 {% endblock%}

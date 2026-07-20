@@ -1,13 +1,16 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title> <link rel="stylesheet" href="base.css">
+    <title>Document</title> <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-    <header style=" background-color: aqua; padding: 10px ;margin-bottom: 15px;">
-        <h1 style=" color: brown;"> mon super site web</h1>
+    <header >
+        <h1 > mon super site web</h1>
+       
+
      <nav>
         <a href="/">Accueille</a> 
         <a href="">A propos</a>
