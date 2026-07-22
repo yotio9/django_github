@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="" method="POST">
+    {% csrf_token %}
+
+    <!-- Champ ID Étudiant -->
+    <div class="form-group">
+        <label for="id_students">Identifiant de l'étudiant :</label>
+        <input type="text" id="id_students" name="id_students" placeholder="Ex: STD12345" required>
+    </div>
+
+    <!-- Champ Date -->
+    <div class="form-group">
+        <label for="date_status">Date de l'absence :</label>
+        <input type="date" id="date_status" name="date" required>
+    </div>
+
+    <!-- Champ Statut (Booléen) -->
+    <div class="form-group">
+        <label for="status">Statut de l'absence :</label>
+        <select id="status" name="status" required>
+            <option value="" disabled selected>Choisir une option</option>
+            <option value="true">Justifiée</option>
+            <option value="false">Non justifiée</option>
+        </select>
+    </div>
+
+    <button type="submit">Enregistrer</button>
+</form>
+
+</body>
+</html>

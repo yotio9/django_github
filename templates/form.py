@@ -45,10 +45,10 @@ class AbsenceForm(forms.ModelForm):
     class Meta:
         model = Absences
         # On demande uniquement l'étudiant et le champ 'age'
-        fields = ['id_students', 'age']
+        fields = ['id_students','status']
         
         # Personnalisation des labels en français
         labels = {
             'id_students': 'Sélectionner l\'étudiant',
-            'age': 'Justification / Motif ou Âge'
+            'status': 'Justification / Motif ou Âge'
         }

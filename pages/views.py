@@ -53,3 +53,8 @@ def message_list_view(request):
     context={"donnes":donnes}
     return render(request,'message_list.html',context)
     
+
+def  absences_views(request):
+   if request.method == 'POST':
+      
+   
