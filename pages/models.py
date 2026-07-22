@@ -44,7 +44,7 @@ class Grades (models.Model):
 class Absences (models.Model):
      id_students= models.ForeignKey('Students',on_delete=models.CASCADE,related_name='absences')
      date=models.DateTimeField(auto_now_add=True)
-     age=models.CharField(max_length=10)
+     status=models.CharField(max_length=10)
 
 
 

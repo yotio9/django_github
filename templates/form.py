@@ -38,7 +38,17 @@ class StudentsForm(forms.ModelForm):
         model=Users
         fields='__all__'
 
-class AbsenseForm(forms.ModelForm):
+
+
+
+class AbsenceForm(forms.ModelForm):
     class Meta:
-        model=Users
-        fields='__all__'
+        model = Absences
+        # On demande uniquement l'étudiant et le champ 'age'
+        fields = ['id_students', 'age']
+        
+        # Personnalisation des labels en français
+        labels = {
+            'id_students': 'Sélectionner l\'étudiant',
+            'age': 'Justification / Motif ou Âge'
+        }

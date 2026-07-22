@@ -1,21 +1,109 @@
- {% extends 'base.html' %}
+
 
 
  {%block content%}
-    <h2> bonjour, {{nom}}!</h2>
-    {%if est_connecte. %}
-        <p>vous est_connecter.</p>
-    {%else%}
-        <p> veuillez vous est_connecter.<p> 
-    {%endif%}  
-    
-    
-    <h2>vos {{couleurs}}couleurs preferées:</h2>
+   <form action="" method="post">
+    <!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #666;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            border: none;
+            color: white;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
 
-    <ul>
-        {% for couleur in couleurs %}
-             <li>{{couleur}}</li>{% empty %}
-            <li>vous n'avez pas de couleur</li>
-        {%endfor%}             
-    </ul>
+<div class="login-container">
+    <h2>Connexion</h2>
+
+    <!-- Affichage de l'erreur si les identifiants sont faux -->
+    {% if erreur %}
+        <div class="error-message">
+            {{ erreur }}
+        </div>
+    {% endif %}
+
+    <!-- Le formulaire renvoie les données en POST sur la même page -->
+    <form method="POST" action="">
+        <!-- Sécurité Django obligatoire pour les formulaires POST -->
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="username">Nom d'utilisateur :</label>
+            <input type="text" id="username" name="username" required placeholder="Entrez votre pseudo">
+        </div>
+
+        <div class="form-group">
+            <label for="password">Mot de passe :</label>
+            <input type="password" id="password" name="password" required placeholder="Entrez votre mot de passe">
+        </div>
+
+        <button type="submit">Se connecter</button>
+    </form>
+</div>
+
+</body>
+</html>
+
+   </form>
 {% endblock%} 
