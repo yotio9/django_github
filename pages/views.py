@@ -1,7 +1,7 @@
 from django.shortcuts import render ,redirect
 from django.http import HttpResponse
-from .models import contact_message
-from templates.form import contact_message_Form,UsersForm
+from .models import contact_message,Users,Grades,Students,Subjects,Teachers,Absences
+from templates.form import contact_message_Form,UsersForm, StudentsForm,SubjectsForm,AbsenceForm,TeacherForm,GradeForm
 from django.contrib.auth import authenticate, login
 
 def home_page_view (request):
@@ -30,6 +30,7 @@ def bienvenue_views(request):
 
 
 
+
 def contact_page_view (request):
     succes=None
     if request.method == 'POST':
@@ -53,8 +54,20 @@ def message_list_view(request):
     context={"donnes":donnes}
     return render(request,'message_list.html',context)
     
+def inscrption_send(request):
+    if request.method == 'POST':
+       valeur_name=request.POST.get('name')
+       valeur_email=request.POST.get('email')
+       valeur_mdp=request.POST.get('mot_de_passe')
+       valeur_role=request.POST.get('role')
+       Users.objects.create(
+          name=valeur_name,
+          email=valeur_email,
+          mot_de_passe=valeur_mdp,
+          role=valeur_role
+       )
+       return redirect('/')
+    return render(request,'inscription.html')
 
-def  absences_views(request):
-   if request.method == 'POST':
       
    

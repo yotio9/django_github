@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - Choisir un rôle</title>
+    <link rel="stylesheet" href="{% static 'css/choix_user.css' %}">
+</head>
+<body>
+
+    <div class="login-container">
+        <h1>Bienvenue</h1>
+        <p class="subtitle">Veuillez sélectionner votre profil pour continuer</p>
+
+        <div class="roles-grid">
+            <!-- Option Professeur -->
+            <a href="/login/professeur" class="role-card">
+                <div class="icon">👨‍🏫</div>
+                <h2>Professeur</h2>
+                <p>Accéder aux classes et aux notes</p>
+            </a>
+
+            <!-- Option Étudiant -->
+            <a href="/login/etudiant" class="role-card">
+                <div class="icon">🎓</div>
+                <h2>Étudiant</h2>
+                <p>Consulter les cours et l'emploi du temps</p>
+            </a>
+
+            <!-- Option Admin -->
+            <a href="/login/admin" class="role-card">
+                <div class="icon">⚙️</div>
+                <h2>Administrateur</h2>
+                <p>Gérer l'établissement et les utilisateurs</p>
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>
