@@ -15,21 +15,21 @@
 
         <div class="roles-grid">
             <!-- Option Professeur -->
-            <a href="/login/professeur" class="role-card">
+            <a href="{% url 'inscription_prf' %}" class="role-card">
                 <div class="icon">👨‍🏫</div>
                 <h2>Professeur</h2>
                 <p>Accéder aux classes et aux notes</p>
             </a>
 
             <!-- Option Étudiant -->
-            <a href="/login/etudiant" class="role-card">
+            <a href="{% url 'inscription_etd' %}" class="role-card">
                 <div class="icon">🎓</div>
                 <h2>Étudiant</h2>
                 <p>Consulter les cours et l'emploi du temps</p>
             </a>
 
             <!-- Option Admin -->
-            <a href="/login/admin" class="role-card">
+            <a href="/admin" class="role-card">
                 <div class="icon">⚙️</div>
                 <h2>Administrateur</h2>
                 <p>Gérer l'établissement et les utilisateurs</p>

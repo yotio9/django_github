@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - Espace Étudiant</title>
+    <!-- Chargement du fichier CSS statique -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/connexion.css' %}">
+</head>
+<body>
+
+    <div class="login-container">
+        <div class="login-header">
+            <h2>Bienvenue</h2>
+            <p>Connectez-vous à votre espace étudiant</p>
+        </div>
+
+        <!-- Affichage des messages d'erreur Django -->
+        {% if error %}
+            <div class="error-message">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        <form method="POST" class="login-form">
+            {% csrf_token %}
+            
+            <div class="input-group">
+                <label for="username">Nom d'utilisateur</label>
+                <input type="text" id="username" name="username" placeholder="Ex: jean.dupont" required>
+            </div>
+
+            <div class="input-group">
+                <label for="password">Mot de passe</label>
+                <input type="password" id="password" name="password" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="login-btn">Se connecter</button>
+        </form>
+
+        <div class="login-footer">
+            <p>Pas encore inscrit ? <a href="{% url 'inscription_etd' %}">Créer un compte</a></p>
+        </div>
+    </div>
+
+</body>
+</html>

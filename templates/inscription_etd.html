@@ -1,0 +1,75 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription</title>
+    <!-- Lien vers le fichier CSS externe -->
+    <link rel="stylesheet" href="{% static 'css/inscription.css' %}">
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Créer un compte</h2>
+        <form action="{% url 'inscription_etd'%}" method="POST">
+            {% csrf_token %}
+
+            <!-- Champ Nom -->
+            <div class="form-group">
+                <label for="id_name">Nom complet</label>
+                <input type="text" id="id_name" name="name" placeholder="Ex: Jean Dupont" required>
+            </div>
+
+            <!-- Champ Email -->
+            <div class="form-group">
+                <label for="id_email">Adresse e-mail</label>
+                <input type="email" id="id_email" name="email" placeholder="Ex: jean.dupont@email.com" required>
+            </div>
+
+            <!-- Champ Mot de passe -->
+            <div class="form-group">
+                <label for="id_password">Mot de passe</label>
+                <input type="password" id="id_password" name="mot_de_passe" placeholder="Au moins 8 caractères" required>
+            </div>
+
+            
+
+            <!-- Champ Rôle -->
+       
+           <!-- OPTION ÉTUDIANT (DÉROULANTE) -->
+        <!-- Champ Prénom -->
+        <div class="form-group">
+            <label for="prenom">Prénom</label>
+            <input type="text" id="prenom" name="prenom">
+        </div>
+        <!-- Champ Âge -->
+        <div class="form-group">
+            <label for="age">Âge</label>
+            <input type="number" id="age" name="age" min="1">
+        </div>
+        <!-- Champ Classe -->
+        <div class="form-group">
+            <label for="classe">Classe</label>
+            <input type="text" id="classe" name="classe" placeholder="Ex: Terminale A, Licence 1">
+        </div>
+        <button type="submit" class="btn-submit">S'inscrire</button>
+        <!-- Champ Niveau d'étude -->
+    
+    </div>
+
+<!-- OPTION PEF (DÉROULANTE) -->
+
+
+
+            <!-- Bouton de soumission -->
+            
+        </form>
+    </div>
+
+</body>
+</html>
+
+</body>
+</html>

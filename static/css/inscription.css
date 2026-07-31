@@ -81,3 +81,47 @@ body {
 .btn-submit:hover {
     background-color: #357abd;
 }
+* STYLE DES BLOCS DÉROULANTS */
+.bloc-profil {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+
+/* Style de la ligne cliquable */
+summary {
+    padding: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    background: #eaeaea;
+    list-style: none; /* Cache la flèche par défaut du navigateur */
+}
+
+summary::-webkit-details-marker {
+    display: none; /* Cache la flèche sur Chrome/Safari */
+}
+
+/* Changement de couleur quand le bloc est ouvert */
+details[open] summary {
+    background: #764ba2;
+    color: white;
+}
+
+/* Espace interne pour les champs masqués */
+.champs-interne {
+    padding: 15px;
+    border-top: 1px solid #ddd;
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 12px;
+    background: #764ba2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    margin-top: 10px;}

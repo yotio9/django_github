@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'pages',
+    'compte',
 ]
 
 MIDDLEWARE = [
@@ -119,3 +120,6 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS=[
     BASE_DIR / "static"
 ]
+
+
+AUTH_USER_MODEL = 'compte.Users'

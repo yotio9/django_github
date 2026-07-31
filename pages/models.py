@@ -1,4 +1,12 @@
 from django.db import models
+from django.contrib.auth.models import  AbstractUser
+from compte.models import Users
+
+class Classes(models.Model):
+    name=models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
 
 # Create your models here.
 class contact_message(models.Model):
@@ -13,38 +21,41 @@ class contact_message(models.Model):
     def __str__(self):
         return f"{self.name} - {self.email}"
 
-class Users(models.Model):
-   name=models.CharField(max_length=100)
-   role=models.CharField(max_length=100)
-   mot_de_passe=models.CharField(max_length=8)
-   email=models.EmailField()
+
+  
 
 class Teachers(models.Model):
-    nom=models.CharField(max_length=100)
+    user=models.OneToOneField(Users,on_delete=models.CASCADE,related_name='teachers')
     matiere=models.CharField(max_length=100)
-    users_id=models.ForeignKey('Users',on_delete=models.CASCADE,related_name='teachers')
-
+   
 class Subjects(models.Model):
     nom=models.CharField(max_length=100)
-    id_teachers=models.ForeignKey('Teachers',on_delete=models.CASCADE,related_name='subjects')
+    id_teachers=models.ForeignKey(Teachers,on_delete=models.SET_NULL,related_name='subjects',   null=True,
+    blank=True)
 
 class Students(models.Model):
+    user=models.OneToOneField(Users,on_delete=models.CASCADE,related_name='students' )
     nom=models.CharField(max_length=100)
     prenom=models.CharField(max_length=100)
     age=models.CharField(max_length=10)
-    classe=models.CharField(max_length=100)
-    users_id= models.ForeignKey('Users',on_delete=models.CASCADE,related_name='students')
+    classe=models.ForeignKey(Classes,on_delete=models.SET_NULL,related_name='students', null=True,
+    blank=True)
+    
 
 class Grades (models.Model):
-     id_students= models.ForeignKey('Students',on_delete=models.CASCADE,related_name='grades')
-     id_subjects= models.ForeignKey('Subjects',on_delete=models.CASCADE,related_name='grades')
-     age=models.CharField(max_length=10)
+     id_students= models.ForeignKey(Students,on_delete=models.SET_NULL,related_name='grades',   null=True,
+    blank=True)
+     id_subjects= models.ForeignKey(Subjects,on_delete=models.SET_NULL,related_name='grades',   null=True,
+    blank=True)
+     note=models.FloatField(default=0.0)
 
      
 class Absences (models.Model):
-     id_students= models.ForeignKey('Students',on_delete=models.CASCADE,related_name='absences')
+     id_students= models.ForeignKey(Students,on_delete=models.SET_NULL,related_name='absences',   null=True,
+    blank=True)
      date=models.DateTimeField(auto_now_add=True)
      status=models.CharField(max_length=10)
+
 
 
 
