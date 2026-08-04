@@ -4,6 +4,7 @@ from .models import contact_message,Users,Grades,Students,Subjects,Teachers,Abse
 from templates.form import contact_message_Form,UsersForm, StudentsForm,SubjectsForm,AbsenceForm,TeacherForm,GradeForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from compte.views import connexion_view
 
 
 def home_page_view (request):
@@ -135,12 +136,13 @@ def choix_users(request):
 
 @login_required  # Force l'utilisateur à se connecter avant de voir la page
 def espace_etd(request):
+    utilisateur_connect= request.user
     # Récupère UNIQUEMENT l'étudiant connecté avec ses relations chargées
     try:
         donnees = Students.objects.select_related('user', 'classe').get(user=request.user)
     except Students.DoesNotExist:
         donnees = None  # Évite un crash si un admin connecté n'est pas un étudiant
-   
+    utilisateur_connect= request.user
     return render(request, 'espace_etd.html', {"donnees": donnees})
 
 #######################################
@@ -176,10 +178,14 @@ def choix_users(request):
 @login_required  # Force l'utilisateur à se connecter avant de voir la page
 def espace_prf(request):
     # Récupère UNIQUEMENT l'étudiant connecté avec ses relations chargées
-   
-   
-    return render(request, 'espace_prf.html')
-
+      try:
+         donnees = Teachers.objects.select_related('user',).get(user=request.user)
+         stud=Students.objects.select_related('classe')
+      except Teachers.DoesNotExist:
+         donnees = None  # Évite un crash si un admin connecté n'est pas un professeur
+         stud=[]
+      context={"donnees":donnees,"stud":stud}
+      return render(request, 'espace_prf.html',context)
 
 
 

@@ -10,12 +10,13 @@ def connexion_view(request):
         nom_utilisateur = request.POST.get('username')
         mot_de_passe = request.POST.get('password')
         user = authenticate(request, username=nom_utilisateur, password=mot_de_passe)
+    
         if user is not None:
             login(request, user)
-            if hasattr(user,'role') and user=="etudiant":
+            if hasattr(user,'role') and user.role=="etudiant":
                 return redirect("espace_etd")
-            elif hasattr(user,"role") and user == "professeur":
-                return redirect("espace_^prf")
+            elif hasattr(user,"role") and user.role == "professeur":
+                return redirect("espace_prf")
             else:
                 return render(request, 'connection.html', {'error': 'Identifiants ou mot de passe invalides.'})
                         # Si la requête est en GET, on affiche juste la page avec le formulaire

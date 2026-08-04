@@ -26,7 +26,7 @@
         {% csrf_token %}
     <header class="d-flex justify-content-between align-items-center mb-4">
         <!-- Remplacement de la boucle par un accès direct à l'étudiant connecté -->
-        <h2>Bienvenue, {{ donnees.nom }} {{ donnees.prenom }}</h2>
+        <h2>Bienvenue, <span style="font-size: 40px; color: rgb(57, 48, 159);">{{ donnees.nom }} {{ donnees.prenom }}</span> </h2>
         
         <!-- Utilisation de la variable 'donnees' pour le matricule -->
         <span class="badge bg-secondary fs-6">Matricule: {{ donnees.matricule }}</span>
@@ -38,13 +38,13 @@
             <div class="col-md-4">
                 <div class="stat-card success">
                     <h5>Moyenne Générale</h5>
-                    <div class="stat-number">{{ average_grade|default:"--" }} / 20</div>
+                    <div class="stat-number" style="color: rgb(100, 149, 3);">{{ average_grade|default:"--" }} / 20</div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="stat-card warning">
                     <h5>Classe</h5>
-                    <div class="stat-number">{{ student.classe }}</div>
+                    <div class="stat-number" style="font-size: 25px; color: orange;">{{ donnees.classe.name }}</div>
                 </div>
             </div>
             <div class="col-md-4">

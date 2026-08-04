@@ -21,12 +21,13 @@
     </div>
 
     <!-- Contenu principal -->
+   
     <div class="main-content">
         <header class="d-flex justify-content-between align-items-center mb-4">
-            <h2>Portail Enseignant : {{ teacher.nom }}</h2>
-            <span class="badge bg-primary fs-6">Matière : {{ teacher.matiere }}</span>
+            <h2>Portail Enseignant : {{ donnees.user.username }}</h2>
+            <span class="badge bg-primary fs-6">Matière : {{ donnees.matiere }}</span>
         </header>
-
+    
         <div class="row">
             <!-- Formulaire de Saisie de Note -->
             <div class="col-lg-6">
@@ -34,15 +35,15 @@
                     <h4 class="mb-3">Saisir une Note (0 à 20)</h4>
                     
                     <!-- Formulaire Django lié au backend -->
-                    <form action="{% url 'add_grade' %}" method="POST">
+                    <form action="" method="POST">
                         {% csrf_token %}
                         
                         <div class="mb-3">
                             <label for="student" class="form-label">Sélectionner l'étudiant</label>
                             <select name="student_id" id="student" class="form-select" required>
                                 <option value="">-- Choisir un étudiant --</option>
-                                {% for student in students %}
-                                    <option value="{{ student.id }}">{{ student.nom }} {{ student.prenom }} ({{ student.classe }})</option>
+                                {% for i in stud %}
+                                    <option value="{{ i.students.id }}">{{ i.student.nom }} {{ i.student.prenom }} ({{ student.classe }})</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -62,7 +63,7 @@
                 <div class="custom-table-container">
                     <h4 class="mb-3">Signaler une Absence</h4>
 
-                    <form action="{% url 'add_absence' %}" method="POST">
+                    <form action="" method="POST">
                         {% csrf_token %}
 
                         <div class="mb-3">
