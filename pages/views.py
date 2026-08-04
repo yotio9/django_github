@@ -92,33 +92,7 @@ def choix_users(request):
    return render(request,'choix_users.html')
 
 
-def inscrption_prf(request):
-    if request.method == 'POST':
-  
-       name=request.POST.get('name')
-       email=request.POST.get('email')
-       role="professeur"
-       matiere=request.POST.get('matiere')
-      
-       Users.objects.create_user(
-          name=name,
-          email=email,
-          matiere=matiere,
-          role=role
-       )
-
-       Teachers.objects.create(
-                 nom=name,
-                 matiere=matiere,
-                 
-              )
-
-            
-       return redirect('/')
-    return render(request,'inscription_prf.html')
-
-def choix_users(request):
-   return render(request,'choix_users.html')
+############################################################""
 
 def inscrption_etd(request):
     if request.method == 'POST':
@@ -148,7 +122,7 @@ def inscrption_etd(request):
             prenom=prenom,
             age=age,
             classe=classe_obj,
-            user_id=user.id# on lie l'utilisateur à l'étudiant en utilisant la clé étrangère
+            user_id=user# on lie l'utilisateur à l'étudiant en utilisant la clé étrangère
             )
       
 
@@ -169,18 +143,42 @@ def espace_etd(request):
    
     return render(request, 'espace_etd.html', {"donnees": donnees})
 
+#######################################
+def inscrption_prf(request):
+    if request.method == 'POST':
+  
+       name=request.POST.get('name')
+       email=request.POST.get('email')
+       mdp=request.POST.get("mot_de_passe")
+       role="professeur"
+       matiere=request.POST.get('matiere')
+      
+       teach=Users.objects.create_user(
+          username=name,
+          email=email,
+          password=mdp,
+          role=role
+       )
 
+       Teachers.objects.create(
+                 user=teach,
+                 matiere=matiere,
+                 
+              )
 
+            
+       return redirect('/')
+    return render(request,'inscription_prf.html')
+
+def choix_users(request):
+   return render(request,'choix_users.html')
 
 @login_required  # Force l'utilisateur à se connecter avant de voir la page
 def espace_prf(request):
     # Récupère UNIQUEMENT l'étudiant connecté avec ses relations chargées
-    try:
-        donnees = Teachers.objects.select_related('user', 'classe').get(user=request.user)
-    except Teachers.DoesNotExist:
-        donnees = None  # Évite un crash si un admin connecté n'est pas un étudiant
    
-    return render(request, 'espace_etd.html', {"donnees": donnees})
+   
+    return render(request, 'espace_prf.html')
 
 
 
