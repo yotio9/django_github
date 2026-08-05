@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import contact_message
+from .models import contact_message,Grades,Subjects,Students,Teachers
 
 # pour que ca s'enregistre dans le server                                   
 
@@ -10,4 +10,12 @@ class contact_message_admin(admin.ModelAdmin):
     search_fields=('name','email')
 
 admin.site.register(contact_message,contact_message_admin)
+
+admin.site.register(Grades)
+class Grades(admin.ModelAdmin):
+    list_display=('nom')# 
+
+admin.site.register(Subjects)
+admin.site.register(Students)
+admin.site.register(Teachers)
 

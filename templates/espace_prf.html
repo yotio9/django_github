@@ -35,7 +35,7 @@
                     <h4 class="mb-3">Saisir une Note (0 à 20)</h4>
                     
                     <!-- Formulaire Django lié au backend -->
-                    <form action="" method="POST">
+                    <form action="{% url 'espace_etd' %}" method="POST">
                         {% csrf_token %}
                         
                         <div class="mb-3">
@@ -43,7 +43,17 @@
                             <select name="student_id" id="student" class="form-select" required>
                                 <option value="">-- Choisir un étudiant --</option>
                                 {% for i in stud %}
-                                    <option value="{{ i.students.id }}">{{ i.student.nom }} {{ i.student.prenom }} ({{ student.classe }})</option>
+                                    <option value="{{i.id}}"> {{ i.nom }} {{ i.prenom }}  ({{ i.classe.name }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                          <div class="mb-3">
+                            <label for="student" class="form-label">Sélectionner la Matiere</label>
+                            <select name="student_id" id="student" class="form-select" required>
+                                <option value="">-- Choisir la Matiere --</option>
+                                {% for i in sub %}
+                                    <option value="{{i.id}}"> {{ i.nom }} </option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -70,8 +80,8 @@
                             <label for="student_abs" class="form-label">Sélectionner l'étudiant</label>
                             <select name="student_id" id="student_abs" class="form-select" required>
                                 <option value="">-- Choisir un étudiant --</option>
-                                {% for student in students %}
-                                    <option value="{{ student.id }}">{{ student.nom }} {{ student.prenom }}</option>
+                                {% for i in stud %}
+                                    <option value="{{ i.id }}">{{ i.nom }} {{ i.prenom }}</option>
                                 {% endfor %}
                             </select>
                         </div>

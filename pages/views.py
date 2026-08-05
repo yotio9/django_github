@@ -97,39 +97,36 @@ def choix_users(request):
 
 def inscrption_etd(request):
     if request.method == 'POST':
-       name=request.POST.get('name')
-       prenom=request.POST.get('prenom')
-       classe=request.POST.get('classe')
-       age=request.POST.get('age')
+        name = request.POST.get('name')
+        prenom = request.POST.get('prenom')
+        classe = request.POST.get('classe')
+        age = request.POST.get('age')
 
-
-       email=request.POST.get('email')
-       mdp=request.POST.get('mot_de_passe')
-       role="etudiant"
-       classe_obj,created = Classes.objects.get_or_create(name=classe )
-       user = Users.objects.create_user(
-          username=name,
-          email=email,
-          password=mdp,
-          role=role,
-
-          )
+        email = request.POST.get('email')
+        mdp = request.POST.get('mot_de_passe')
+        role = "etudiant"
+        
+        classe_obj, created = Classes.objects.get_or_create(name=classe)
+        
+        stuud = Users.objects.create_user(
+            username=name,
+            email=email,
+            password=mdp,
+            role=role,
+        )
   
-       
-
-       Students.objects.create(
-
+        # CORRECTION ICI : Utilisez 'user' au lieu de 'user_id'
+        Students.objects.create(
+            user=stuud,
             nom=name,
             prenom=prenom,
             age=age,
-            classe=classe_obj,
-            user_id=user# on lie l'utilisateur à l'étudiant en utilisant la clé étrangère
-            )
-      
+            classe=classe_obj,# <-- Changement effectué ici
+        )
+        print(stuud)
+        return redirect('/')
+    return render(request, 'inscription_etd.html')
 
-            
-       return redirect('/')
-    return render(request,'inscription_etd.html')
 
 def choix_users(request):
    return render(request,'choix_users.html')
@@ -179,12 +176,26 @@ def choix_users(request):
 def espace_prf(request):
     # Récupère UNIQUEMENT l'étudiant connecté avec ses relations chargées
       try:
-         donnees = Teachers.objects.select_related('user',).get(user=request.user)
+         donnees = Teachers.objects.select_related('user').get(user=request.user)
          stud=Students.objects.select_related('classe')
+         sub=Subjects.objects.all()
+         
       except Teachers.DoesNotExist:
          donnees = None  # Évite un crash si un admin connecté n'est pas un professeur
          stud=[]
-      context={"donnees":donnees,"stud":stud}
+         sub=[]
+      context={"donnees":donnees,"stud":stud,'sub':sub}
+
+      if request.method=='POST':
+         eleve=request.POST.get('student_id')
+         note=request.POST.get('note')
+         date=request.POST.get('date')
+         status=request.POST.get('status')
+         Grades.objects.create(
+            note=note,
+            
+
+         )
       return render(request, 'espace_prf.html',context)
 
 
