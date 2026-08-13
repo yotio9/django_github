@@ -43,9 +43,9 @@ class Students(models.Model):
     
 
 class Grades (models.Model):
-     id_students= models.ForeignKey(Students,on_delete=models.SET_NULL,related_name='grades',   null=True,
+     id_students= models.ForeignKey(Students,on_delete=models.CASCADE,related_name='grades',   null=True,
     blank=True)
-     id_subjects= models.ForeignKey(Subjects,on_delete=models.SET_NULL,related_name='grades',   null=True,
+     id_subjects= models.ForeignKey(Subjects,on_delete=models.CASCADE,related_name='grades',   null=True,
     blank=True)
      note=models.FloatField(default=0.0)
 

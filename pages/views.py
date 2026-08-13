@@ -185,18 +185,73 @@ def espace_prf(request):
          stud=[]
          sub=[]
       context={"donnees":donnees,"stud":stud,'sub':sub}
-
+     
       if request.method=='POST':
-         eleve=request.POST.get('student_id')
+        
+         print("-> UNE REQUETE POST A ETE REÇUE !") # S'affichera dans votre terminal
+        
+         if not donnees:
+            context["error"] = "Action impossible : Vous êtes connecté mais vous n'êtes pas enregistré comme Professeur dans la base de données."
+            return render(request, 'espace_prf.html', context)
+
+         
+         eleve=request.POST.get('student')
+         eleve1=request.POST.get('student1')
          note=request.POST.get('note')
          date=request.POST.get('date')
          status=request.POST.get('status')
-         Grades.objects.create(
-            note=note,
-            
+         matiere=request.POST.get('Matiere')
+         form_type=request.POST.get('form_type')
 
-         )
+         if form_type =='note':
+                       try:
+                                   vrai_eleve=Students.objects.get(id=eleve) #recupere l'id de, l' eleve dans le champ student
+                                   vrai_matiere=Subjects.objects.get(id=matiere)
+                                   Grades.objects.create(
+                                               note=note,
+                                               id_students=vrai_eleve,#id brut dans la colonnes id_student
+                                               id_subjects=vrai_matiere
+                                                 )
+                                   print('NOTE ENREGISTRER')
+                                   return redirect('espace_prf')
+
+         
+                       except Exception as e:
+            
+                         context["error"] = f"Erreur d'enregistrement : {e}"
+                         return render(request, 'espace_prf.html', context)
+         elif form_type =='absences':
+             try:
+                 vrai_eleve=Students.objects.get(id=eleve1)
+                 Absences.objects.create(
+                     id_students=vrai_eleve,
+                     date=date,
+                     status=status
+                 )
+                 print('ABSENCES ENREGISTRER')
+                 return redirect('espace_prf')
+
+             
+             except Exception as e:
+                         
+                     context["error"] = f"Erreur d'enregistrement : {e}"
+                     return render(request, 'espace_prf.html', context)    
+                               
       return render(request, 'espace_prf.html',context)
 
+@login_required
+def modifier_prf(request):
 
-
+      # Récupère UNIQUEMENT l'étudiant connecté avec ses relations chargées
+           try:
+              donnees = Teachers.objects.select_related('user').get(user=request.user)
+              stud=Students.objects.select_related('classe')
+              sub=Subjects.objects.all()
+              
+           except Teachers.DoesNotExist:
+              donnees = None  # Évite un crash si un admin connecté n'est pas un professeur
+              stud=[]
+              sub=[]
+           context={"donnees":donnees,"stud":stud,'sub':sub}
+           return render(request,"espace_prf_modif.html",context)
+  

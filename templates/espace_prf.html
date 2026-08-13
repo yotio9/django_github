@@ -11,13 +11,18 @@
     <link rel="stylesheet" href="{% static 'css/espaces.css' %}">
 </head>
 <body>
+    {% if error %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endif %}
 
     <!-- Barre latérale -->
     <div class="sidebar">
         <h3 class="text-center mb-4 fs-4">Espace Professeur</h3>
-        <a href="#" class="active">Mes Enseignements</a>
-        <a href="#">Saisir une Note</a>
-        <a href="#">Marquer une Absence</a>
+        
+        <a href="#">Saisir une Note et Absence</a>
+        <a href="{% url 'modifier_prf' %}">Modifier Note et Absence</a>
     </div>
 
     <!-- Contenu principal -->
@@ -35,25 +40,26 @@
                     <h4 class="mb-3">Saisir une Note (0 à 20)</h4>
                     
                     <!-- Formulaire Django lié au backend -->
-                    <form action="{% url 'espace_etd' %}" method="POST">
+                    <form action="{% url 'espace_prf' %}" method="POST">
                         {% csrf_token %}
+                        <input type="hidden" name="form_type" value="note">
                         
                         <div class="mb-3">
                             <label for="student" class="form-label">Sélectionner l'étudiant</label>
-                            <select name="student_id" id="student" class="form-select" required>
+                            <select name="student" id="student" class="form-select" required>
                                 <option value="">-- Choisir un étudiant --</option>
                                 {% for i in stud %}
-                                    <option value="{{i.id}}"> {{ i.nom }} {{ i.prenom }}  ({{ i.classe.name }})</option>
+                                    <option value="{{i.id}}"> {{i.id}}{{ i.nom }} {{ i.prenom }}  ({{ i.classe.name }})</option>
                                 {% endfor %}
                             </select>
                         </div>
 
                           <div class="mb-3">
                             <label for="student" class="form-label">Sélectionner la Matiere</label>
-                            <select name="student_id" id="student" class="form-select" required>
+                            <select name="Matiere" id="student" class="form-select" required>
                                 <option value="">-- Choisir la Matiere --</option>
                                 {% for i in sub %}
-                                    <option value="{{i.id}}"> {{ i.nom }} </option>
+                                    <option value="{{i.id}}">{{i.id}} {{ i.nom }} </option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -73,12 +79,12 @@
                 <div class="custom-table-container">
                     <h4 class="mb-3">Signaler une Absence</h4>
 
-                    <form action="" method="POST">
+                    <form action="{% url 'espace_prf' %}" method="POST">
                         {% csrf_token %}
-
+                        <input type="hidden" name="form_type" value="absences">
                         <div class="mb-3">
                             <label for="student_abs" class="form-label">Sélectionner l'étudiant</label>
-                            <select name="student_id" id="student_abs" class="form-select" required>
+                            <select name="student1" id="student_abs" class="form-select" required>
                                 <option value="">-- Choisir un étudiant --</option>
                                 {% for i in stud %}
                                     <option value="{{ i.id }}">{{ i.nom }} {{ i.prenom }}</option>
