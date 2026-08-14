@@ -19,6 +19,15 @@
         <a href="#">Mes Notes</a>
         <a href="#">Mes Absences</a>
         <a href="#">Profil</a>
+        {% if user.is_authenticated %}
+         <form action="{% url 'logout' %}">
+         {% csrf_token %}
+            <button style=" background-color: red; color: aliceblue;"> Decoonection</button>
+         </form>
+         {% esle %}
+         <a href="{% url'login' %}">R</a>
+         {% endif%}
+        
     </div>
 
     <!-- Contenu principal -->

@@ -106,7 +106,7 @@ def inscrption_etd(request):
        mdp=request.POST.get('mot_de_passe')
        role="etudiant"
        classe_obj,created = Classes.objects.get_or_create(name=classe )
-       user = Users.objects.create_user(
+       user= Users.objects.create_user(
           username=name,
           email=email,
           password=mdp,
@@ -117,12 +117,12 @@ def inscrption_etd(request):
        
 
        Students.objects.create(
+            user=user,# on lie l'utilisateur à l'étudiant en utilisant la 
 
             nom=name,
             prenom=prenom,
             age=age,
             classe=classe_obj,
-            user_id=user# on lie l'utilisateur à l'étudiant en utilisant la clé étrangère
             )
       
 

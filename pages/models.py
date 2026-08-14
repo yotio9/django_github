@@ -40,6 +40,8 @@ class Students(models.Model):
     age=models.CharField(max_length=10)
     classe=models.ForeignKey(Classes,on_delete=models.SET_NULL,related_name='students', null=True,
     blank=True)
+    def  __str__(self):
+        return f"{self.nom}-{self.prenom}"
     
 
 class Grades (models.Model):
