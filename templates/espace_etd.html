@@ -5,9 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Espace Étudiant - Gestion Scolaire</title>
-    <!-- Inclusion de Bootstrap 5 pour la grille et la mise en page de base -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Fichier CSS séparé -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
@@ -20,27 +18,19 @@
         <a href="#">Mes Absences</a>
         <a href="#">Profil</a>
         {% if user.is_authenticated %}
-         <form action="{% url 'logout' %}">
-         {% csrf_token %}
-            <button style=" background-color: red; color: aliceblue;"> Decoonection</button>
-         </form>
-         {% esle %}
-         <a href="{% url'login' %}">R</a>
-         {% endif%}
-        
+        <form action="{% url 'logout' %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" style="background-color: red; color: aliceblue;">Déconnexion</button>
+        </form>
+        {% endif %}
     </div>
 
     <!-- Contenu principal -->
-    <<div class="main-content">
-        {% csrf_token %}
-    <header class="d-flex justify-content-between align-items-center mb-4">
-        <!-- Remplacement de la boucle par un accès direct à l'étudiant connecté -->
-        <h2>Bienvenue, <span style="font-size: 40px; color: rgb(57, 48, 159);">{{ donnees.nom }} {{ donnees.prenom }}</span> </h2>
-        
-        <!-- Utilisation de la variable 'donnees' pour le matricule -->
-        <span class="badge bg-secondary fs-6">Matricule: {{ donnees.matricule }}</span>
-    </header>
-
+    <div class="main-content">
+        <header class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Bienvenue, <span style="font-size: 40px; color: rgb(57, 48, 159);">{{ donnees.nom }} {{ donnees.prenom }}</span></h2>
+            
+        </header>
 
         <!-- Cartes d'information rapides -->
         <div class="row">
@@ -59,7 +49,7 @@
             <div class="col-md-4">
                 <div class="stat-card danger">
                     <h5>Absences Enregistrées</h5>
-                    <div class="stat-number">{{ total_absences }}</div>
+                    <div class="stat-number">{{ abss|length }}</div>
                 </div>
             </div>
         </div>
@@ -72,13 +62,15 @@
                     <tr>
                         <th>Matière</th>
                         <th>Note</th>
-                        <th>Appréciation</th>
+                        <th>Appreciation</th>
+
+                     
                     </tr>
                 </thead>
                 <tbody>
-                    {% for grade in grades %}
+                    {% for grade in grd %}
                     <tr>
-                        <td>{{ grade.subject.nom }}</td>
+                        <td>{{ grade.id_subjects.nom }}</td>
                         <td><strong>{{ grade.note }} / 20</strong></td>
                         <td>
                             {% if grade.note >= 10 %}
@@ -108,7 +100,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for absence in absences %}
+                    {% for absence in abss %}
                     <tr>
                         <td>{{ absence.date }}</td>
                         <td>

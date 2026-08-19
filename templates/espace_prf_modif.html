@@ -38,11 +38,11 @@
 
                         <div class="mb-3">
                             <label class="form-label">Sélectionner l'eleve</label>
-                            <select name="grade_id" class="form-select" required>
+                            <select name="grade_id" class="form-select" required onchange>
                                 <option value="">-- Choisir  --</option>
-                                {% for g in grades %}
+                                {% for g in stud%}
                                     <option value="">
-                                        {{ g.id_students.nom }} {{ g.id_students.prenom }} — {{ g.id_subjects.nom }} — Note actuelle : {{ g.note }}
+                                        {{ g.nom }}-{{ g.prenom }} —
                                     </option>
                                 {% endfor %}
                             </select>
@@ -54,6 +54,16 @@
                                 <option value="">-- Choisir la Matiere --</option>
                                 {% for s in sub %}
                                     <option value="{{ s.id }}">{{ s.nom }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">liste des Matière</label>
+                            <select name="Matiere" class="form-select" required>
+                                <option value="">-- les Notes --</option>
+                                {% for s in grd %}
+                                    <option value="{{ s.id }}">{{ s.note }}</option>
                                 {% endfor %}
                             </select>
                         </div>

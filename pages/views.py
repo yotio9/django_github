@@ -137,10 +137,14 @@ def espace_etd(request):
     # Récupère UNIQUEMENT l'étudiant connecté avec ses relations chargées
     try:
         donnees = Students.objects.select_related('user', 'classe').get(user=request.user)
+        abss= Absences.objects.filter(id_students=donnees)
+        grd=Grades.objects.filter(id_students=donnees)
     except Students.DoesNotExist:
         donnees = None  # Évite un crash si un admin connecté n'est pas un étudiant
+        abss=[]
+        grd=[]
     utilisateur_connect= request.user
-    return render(request, 'espace_etd.html', {"donnees": donnees})
+    return render(request, 'espace_etd.html', {"donnees": donnees,"abss":abss,"grd":grd})
 
 #######################################
 def inscrption_prf(request):
@@ -178,7 +182,7 @@ def espace_prf(request):
       try:
          donnees = Teachers.objects.select_related('user').get(user=request.user)
          stud=Students.objects.select_related('classe')
-         sub=Subjects.objects.all()
+         sub=Subjects.objects.filter(id_teachers=donnees)
          
       except Teachers.DoesNotExist:
          donnees = None  # Évite un crash si un admin connecté n'est pas un professeur
@@ -246,12 +250,24 @@ def modifier_prf(request):
            try:
               donnees = Teachers.objects.select_related('user').get(user=request.user)
               stud=Students.objects.select_related('classe')
-              sub=Subjects.objects.all()
-              
+              sub=Subjects.objects.filter(id_teachers=donnees)#vas dans la table subject cherche dans le champs id teacher le matiere correspondant a l'id de le personne connecter
+              grd=Grades.objects.all()
            except Teachers.DoesNotExist:
               donnees = None  # Évite un crash si un admin connecté n'est pas un professeur
               stud=[]
               sub=[]
-           context={"donnees":donnees,"stud":stud,'sub':sub}
+           context={"donnees":donnees,"stud":stud,'sub':sub,'grd':grd}
+
+           if request.method=="POST":
+               form_type=request.POST.get("form_type")
+               grade_id=request.POST.get("grade_id")
+
+               if form_type=='modifier_note':
+                   grade_id
+
+
+                   
            return render(request,"espace_prf_modif.html",context)
+
+      
   
