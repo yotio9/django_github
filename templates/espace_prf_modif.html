@@ -19,6 +19,12 @@
         <h3 class="text-center mb-4 fs-4">Espace Professeur</h3>
         <a href="{% url 'espace_prf' %}">Saisir Notes et Absences</a>
         <a href="{% url 'modifier_prf' %}" class="active">Modifier Notes et Absences</a>
+         {% if user.is_authenticated %}
+        <form action="{% url 'logout' %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" style="background-color: red; color: aliceblue;">Déconnexion</button>
+        </form>
+        {% endif %}
     </div>
 
     <div class="main-content">
@@ -27,43 +33,65 @@
         </header>
 
         <div class="row">
-            <!-- Modifier une note -->
+
+            <!-- ══════════════════════════════ -->
+            <!--        MODIFIER UNE NOTE       -->
+            <!-- ══════════════════════════════ -->
             <div class="col-lg-6">
                 <div class="custom-table-container">
                     <h4 class="mb-3">Modifier une Note</h4>
 
-                    <form action="{% url 'modifier_prf' %}" method="POST">
-                        {% csrf_token %}
-                        <input type="hidden" name="form_type" value="modifier_note">
-
+                    <!-- ÉTAPE 1 : choisir l'élève -->
+                    <form method="GET" action="{% url 'modifier_prf' %}">
                         <div class="mb-3">
-                            <label class="form-label">Sélectionner l'eleve</label>
-                            <select name="grade_id" class="form-select" required onchange>
-                                <option value="">-- Choisir  --</option>
-                                {% for g in stud%}
-                                    <option value="">
-                                        {{ g.nom }}-{{ g.prenom }} —
+                            <label class="form-label">Sélectionner l'élève</label>
+                            <select name="student_id" class="form-select" onchange="this.form.submit()">
+                                <option value="">-- Choisir un élève --</option>
+                                {% for s in stud %}
+                                    <option value="{{ s.id }}"
+                                        {% if selected_student_id == s.id|stringformat:"s" %}selected{% endif %}>
+                                        {{ s.nom }} {{ s.prenom }}
                                     </option>
                                 {% endfor %}
                             </select>
                         </div>
+                    </form>
 
+                    <!-- ÉTAPE 2 : choisir la matière -->
+                    {% if selected_student_id %}
+                    <form method="GET" action="{% url 'modifier_prf' %}">
+                        <input type="hidden" name="student_id" value="{{ selected_student_id }}">
                         <div class="mb-3">
-                            <label class="form-label">Nouvelle Matière</label>
-                            <select name="Matiere" class="form-select" required>
-                                <option value="">-- Choisir la Matiere --</option>
+                            <label class="form-label">Matière</label>
+                            <select name="subject_id" class="form-select" onchange="this.form.submit()">
+                                <option value="">-- Choisir la matière --</option>
                                 {% for s in sub %}
-                                    <option value="{{ s.id }}">{{ s.nom }}</option>
+                                    <option value="{{ s.id }}"
+                                        {% if selected_subject_id == s.id|stringformat:"s" %}selected{% endif %}>
+                                        {{ s.nom }}
+                                    </option>
                                 {% endfor %}
                             </select>
                         </div>
+                    </form>
+                    {% endif %}
+
+                    <!-- ÉTAPE 3 : notes filtrées -->
+                    {% if grd %}
+                    <form method="POST" action="{% url 'modifier_prf' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="form_type" value="modifier_note">
+                        <input type="hidden" name="student_id" value="{{ selected_student_id }}">
+                        <input type="hidden" name="subject_id" value="{{ selected_subject_id }}">
 
                         <div class="mb-3">
-                            <label class="form-label">liste des Matière</label>
-                            <select name="Matiere" class="form-select" required>
-                                <option value="">-- les Notes --</option>
-                                {% for s in grd %}
-                                    <option value="{{ s.id }}">{{ s.note }}</option>
+                            <label class="form-label">Note à modifier</label>
+                            <select name="grade_id" class="form-select" required>
+                                <option value="">-- Choisir la note --</option>
+                                {% for g in grd %}
+                                    <option value="{{ g.id }}">
+                                        {{ g.id_subjects.nom }} — Note actuelle : {{ g.note }}
+                                    </option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -76,27 +104,37 @@
                         <button type="submit" class="btn btn-primary w-100">Modifier la note</button>
                     </form>
 
-                    <!-- Suppression rapide -->
-                    <form action="{% url 'modifier_prf' %}" method="POST" class="mt-3">
+                    {% elif selected_student_id and selected_subject_id %}
+                        <p class="text-muted">Aucune note trouvée pour cet élève dans cette matière.</p>
+                    {% endif %}
+
+                    <!-- SUPPRESSION NOTE -->
+                    <form method="POST" action="{% url 'modifier_prf' %}" class="mt-3">
                         {% csrf_token %}
                         <input type="hidden" name="form_type" value="supprimer_note">
                         <select name="grade_id" class="form-select mb-2" required>
                             <option value="">-- Choisir une note à supprimer --</option>
                             {% for g in grades %}
-                                <option value="{{ g.id }}">{{ g.id_students.nom }} — {{ g.id_subjects.nom }} — {{ g.note }}</option>
+                                <option value="{{ g.id }}">
+                                    {{ g.id_students.nom }} {{ g.id_students.prenom }} — {{ g.id_subjects.nom }} — {{ g.note }}
+                                </option>
                             {% endfor %}
                         </select>
                         <button type="submit" class="btn btn-outline-danger w-100">Supprimer la note</button>
                     </form>
+
                 </div>
             </div>
 
-            <!-- Modifier une absence -->
+            <!-- ══════════════════════════════ -->
+            <!--      MODIFIER UNE ABSENCE      -->
+            <!-- ══════════════════════════════ -->
             <div class="col-lg-6">
                 <div class="custom-table-container">
                     <h4 class="mb-3">Modifier une Absence</h4>
 
-                    <form action="{% url 'modifier_prf' %}" method="POST">
+                    <!-- MODIFICATION ABSENCE -->
+                    <form method="POST" action="{% url 'modifier_prf' %}">
                         {% csrf_token %}
                         <input type="hidden" name="form_type" value="modifier_absence">
 
@@ -113,11 +151,6 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Nouvelle Date</label>
-                            <input type="date" name="date" class="form-control" required>
-                        </div>
-
-                        <div class="mb-3">
                             <label class="form-label">Nouveau Statut</label>
                             <select name="status" class="form-select" required>
                                 <option value="non justifiée">Non Justifiée</option>
@@ -128,20 +161,24 @@
                         <button type="submit" class="btn btn-warning w-100 text-white">Modifier l'absence</button>
                     </form>
 
-                    <!-- Suppression rapide -->
-                    <form action="{% url 'modifier_prf' %}" method="POST" class="mt-3">
+                    <!-- SUPPRESSION ABSENCE -->
+                    <form method="POST" action="{% url 'modifier_prf' %}" class="mt-3">
                         {% csrf_token %}
                         <input type="hidden" name="form_type" value="supprimer_absence">
                         <select name="absence_id" class="form-select mb-2" required>
                             <option value="">-- Choisir une absence à supprimer --</option>
                             {% for a in absences %}
-                                <option value="{{ a.id }}">{{ a.id_students.nom }} — {{ a.date }}</option>
+                                <option value="{{ a.id }}">
+                                    {{ a.id_students.nom }} {{ a.id_students.prenom }} — {{ a.date }}
+                                </option>
                             {% endfor %}
                         </select>
                         <button type="submit" class="btn btn-outline-danger w-100">Supprimer l'absence</button>
                     </form>
+
                 </div>
             </div>
+
         </div>
     </div>
 

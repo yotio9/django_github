@@ -5,6 +5,7 @@ from templates.form import contact_message_Form,UsersForm, StudentsForm,Subjects
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from compte.views import connexion_view
+from django.contrib import messages
 
 
 def home_page_view (request):
@@ -243,31 +244,101 @@ def espace_prf(request):
                                
       return render(request, 'espace_prf.html',context)
 
+
 @login_required
 def modifier_prf(request):
+    try:
+        donnees = Teachers.objects.select_related('user').get(user=request.user)
+        stud = Students.objects.select_related('classe')
+        sub = Subjects.objects.filter(id_teachers=donnees)
+        absences = Absences.objects.all()
+        # Notes uniquement dans la matière du prof connecté
+        grades = Grades.objects.filter(
+            id_subjects__id_teachers=donnees
+        ).select_related('id_students', 'id_subjects')
+    except Teachers.DoesNotExist:
+        donnees = None
+        stud = []
+        sub = []
+        absences = []
+        grades = []
 
-      # Récupère UNIQUEMENT l'étudiant connecté avec ses relations chargées
-           try:
-              donnees = Teachers.objects.select_related('user').get(user=request.user)
-              stud=Students.objects.select_related('classe')
-              sub=Subjects.objects.filter(id_teachers=donnees)#vas dans la table subject cherche dans le champs id teacher le matiere correspondant a l'id de le personne connecter
-              grd=Grades.objects.all()
-           except Teachers.DoesNotExist:
-              donnees = None  # Évite un crash si un admin connecté n'est pas un professeur
-              stud=[]
-              sub=[]
-           context={"donnees":donnees,"stud":stud,'sub':sub,'grd':grd}
+    selected_student_id = request.GET.get('student_id')
+    selected_subject_id = request.GET.get('subject_id')
+    grd = []
 
-           if request.method=="POST":
-               form_type=request.POST.get("form_type")
-               grade_id=request.POST.get("grade_id")
+    if selected_student_id and selected_subject_id:
+        grd = Grades.objects.filter(
+            id_students__id=selected_student_id,
+            id_subjects__id=selected_subject_id,
+            id_subjects__id_teachers=donnees  # sécurité : matière du prof uniquement
+        ).select_related('id_students', 'id_subjects')
+    elif selected_student_id:
+        grd = Grades.objects.filter(
+            id_students__id=selected_student_id,
+            id_subjects__id_teachers=donnees  # sécurité : matière du prof uniquement
+        ).select_related('id_students', 'id_subjects')
 
-               if form_type=='modifier_note':
-                   grade_id
+    if request.method == "POST":
+        form_type = request.POST.get("form_type")
+        if form_type == "modifier_note":
+            grade_id = request.POST.get("grade_id")
+            new_note = request.POST.get("note")
+            post_student_id = request.POST.get("student_id")
+            post_subject_id = request.POST.get("subject_id")
+            grade = Grades.objects.get(id=grade_id)
+            grade.note = new_note
+            grade.save()
+            return redirect(f"{request.path}?student_id={post_student_id}&subject_id={post_subject_id}")
+
+    context = {
+        "donnees": donnees,
+        "stud": stud,
+        "sub": sub,
+        "absences": absences,
+        "grades": grades,
+        "grd": grd,
+        "selected_student_id": selected_student_id,
+        "selected_subject_id": selected_subject_id,
+    }
+    return render(request, "espace_prf_modif.html", context)
 
 
-                   
-           return render(request,"espace_prf_modif.html",context)
+def admin_identify(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+        email = request.POST.get("email")
+        pwd = request.POST.get('password')
+        
+     
+        try:
+            Users.objects.create_superuser(
+                username=username,
+                email=email,
+                password=pwd
+            )
+            messages.success(request, "Superutilisateur créé !")
+            # 2. Rediriger vers l'admin après le succès
+            return redirect('admin_identify') 
+        except Exception as e:
+            messages.error(request, f"Erreur : {e}")
 
-      
-  
+    return render(request, "admin_identify.html")
+
+
+def admin_authen(request):
+    if request.method == 'POST':
+        # 1. Récupérer les données saisies par l'utilisateur
+        nom_utilisateur = request.POST.get('username')
+        mot_de_passe = request.POST.get('password')
+        user = authenticate(request, username=nom_utilisateur, password=mot_de_passe)
+    
+        if user is not None:
+            login(request, user)
+            if hasattr(user,'role') and user.role=="":
+                return redirect("admin_identify")
+            
+            else:
+                return render(request, 'admin_authen.html', {'error': 'Identifiants ou mot de passe invalides.'})
+                        # Si la requête est en GET, on affiche juste la page avec le formulaire
+    return render(request,"admin_authen.html")

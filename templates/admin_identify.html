@@ -1,0 +1,77 @@
+{% load  static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Créer un Administrateur</title><!-- Inclusion de la bibliothèque SweetAlert2 -->
+    <script src="https://jsdelivr.net"></script>
+
+    <!-- Lien vers le fichier CSS (à adapter selon votre projet) -->
+    <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+</head>
+<body>
+
+    <div class="container">
+        <!-- VÉRIFICATION : Seul un superutilisateur connecté peut voir le formulaire -->
+        {% if user.is_authenticated and user.is_superuser %}
+            
+            <div class="form-card">
+                <h2>Créer un nouvel administrateur</h2>
+                <p class="subtitle">Outil de gestion du personnel de direction</p>
+
+                <!-- Gestion des messages d'erreur ou succès de Django -->
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert {{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="POST" action="{% url 'admin_identify' %}">
+                    {% csrf_token %}
+                    
+                    <div class="form-group">
+                        <label for="username">Identifiant (Username)</label>
+                        <input type="text" id="username" name="username" placeholder="Ex: jean_admin" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Adresse Email</label>
+                        <input type="email" id="email" name="email" placeholder="Ex: jean@entreprise.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Mot de passe temporaire</label>
+                        <input type="password" id="password" name="password" placeholder="••••••••" required>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Enregistrer le Superuser</button>
+                </form>
+            </div>
+
+        {% else %}
+            <!-- MESSAGE D'ERREUR : Si l'utilisateur n'est pas admin ou pas connecté -->
+            <div class="error-card">
+                <div class="error-icon">🚫</div>
+                <h2>Accès Refusé</h2>
+                <p>Vous devez obligatoirement être connecté avec un **compte administrateur** pour accéder à cette fonctionnalité et enregistrer un autre admin.</p>
+                <a href="{% url 'choix_users' %}" class="btn-login">Se connecter en tant qu'admin</a>
+            </div>
+        {% endif %}
+    </div>
+    {% if messages %}
+    <script>
+        {% for message in messages %}
+            Swal.fire({
+                title: "{% if message.tags == 'success' %}Succès !{% else %}Erreur{% endif %}",
+                text: "{{ message }}",
+                icon: "{{ message.tags }}", // 'success', 'error', 'warning', 'info'
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#4f46e5'
+            });
+        {% endfor %}
+    </script>
+{% endif %}
+
+</body>
+</html>

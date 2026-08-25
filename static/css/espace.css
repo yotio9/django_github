@@ -23,6 +23,9 @@ body {
     padding-top: 20px;
     position: fixed;
     width: 240px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;  /* pousse le dernier élément vers le bas */
 }
 
 .sidebar a {

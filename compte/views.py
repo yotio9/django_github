@@ -17,6 +17,9 @@ def connexion_view(request):
                 return redirect("espace_etd")
             elif hasattr(user,"role") and user.role == "professeur":
                 return redirect("espace_prf")
+            elif hasattr(user,'role')and user.role =="":
+                return redirect("/admin/")
+                
             else:
                 return render(request, 'connection.html', {'error': 'Identifiants ou mot de passe invalides.'})
                         # Si la requête est en GET, on affiche juste la page avec le formulaire
