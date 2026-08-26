@@ -9,9 +9,17 @@
 </head>
 <body>
     
-    <h2>Verification administrateur</h2>
-    <form method="POST">
+    
+
+    <form method="POST" action="{% url 'admin_authen' %}">
         {% csrf_token %}
+
+        <h2>Verification administrateur</h2>
+    {%if error%}
+    <div style=" color: red;  display: flex; align-self: center; margin-bottom: 20px;">
+        {{error}}
+    </div> 
+    {% endif %}
         <input type="text" name="username" placeholder="Nom d'utilisateur" required>
         
         <input type="password" name="password" placeholder="Mot de passe" required>

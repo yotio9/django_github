@@ -13,7 +13,7 @@ admin.site.register(contact_message,contact_message_admin)
 
 admin.site.register(Grades)
 class Grades(admin.ModelAdmin):
-    list_display=('nom')# 
+    list_display=('nom')
 
 admin.site.register(Subjects)
 admin.site.register(Students)

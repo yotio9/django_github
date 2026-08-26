@@ -27,11 +27,15 @@ class contact_message(models.Model):
 class Teachers(models.Model):
     user=models.OneToOneField(Users,on_delete=models.CASCADE,related_name='teachers')
     matiere=models.CharField(max_length=100)
+    def  __str__(self):
+                 return f"{self.user}"
    
 class Subjects(models.Model):
     nom=models.CharField(max_length=100)
     id_teachers=models.ForeignKey(Teachers,on_delete=models.SET_NULL,related_name='subjects',   null=True,
     blank=True)
+    def  __str__(self):
+                 return f"{self.nom}-{self.id_teachers}"
 
 class Students(models.Model):
     user=models.OneToOneField(Users,on_delete=models.CASCADE,related_name='students' )
@@ -41,7 +45,7 @@ class Students(models.Model):
     classe=models.ForeignKey(Classes,on_delete=models.SET_NULL,related_name='students', null=True,
     blank=True)
     def  __str__(self):
-        return f"{self.nom}-{self.prenom}"
+        return f"{self.nom}"
     
 
 class Grades (models.Model):
@@ -50,6 +54,8 @@ class Grades (models.Model):
      id_subjects= models.ForeignKey(Subjects,on_delete=models.CASCADE,related_name='grades',   null=True,
     blank=True)
      note=models.FloatField(default=0.0)
+     def  __str__(self):
+             return f"{self.note}-{self.id_students}"
 
      
 class Absences (models.Model):
@@ -57,6 +63,8 @@ class Absences (models.Model):
     blank=True)
      date=models.DateTimeField(auto_now_add=True)
      status=models.CharField(max_length=10)
+     def  __str__(self):
+                  return f"{self.date} {self.status} -{self.id_students}"
 
 
 

@@ -339,6 +339,10 @@ def admin_authen(request):
                 return redirect("admin_identify")
             
             else:
-                return render(request, 'admin_authen.html', {'error': 'Identifiants ou mot de passe invalides.'})
+                context={"error":"accès refuser vous netes pas admin"}
+                return render(request, 'admin_authen.html',context)
                         # Si la requête est en GET, on affiche juste la page avec le formulaire
+        else:
+            context={"error":" mot de passe ou nom utlisateur incorrect"}
+            return render(request,'admin_authen.html',context)                
     return render(request,"admin_authen.html")

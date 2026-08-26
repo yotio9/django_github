@@ -21,9 +21,15 @@ def connexion_view(request):
                 return redirect("/admin/")
                 
             else:
-                return render(request, 'connection.html', {'error': 'Identifiants ou mot de passe invalides.'})
-                        # Si la requête est en GET, on affiche juste la page avec le formulaire
-    return render(request,"connection.html")      # Si la requête est en GET, on affiche juste la page avec le formulaire
+                context={ "error":" Nom utlisatuer ou Mot de passe incorrect "}
+                return render(request, 'connection.html', context)
+
+
+        else:
+            # ---- CAS MANQUANT : identifiants invalides ----
+            context = {"error": "Nom d'utilisateur ou mot de passe incorrect."}
+            return render(request, 'connection.html', context)                # Si la requête est en GET, on affiche juste la page avec le formulaire
+    return render(request,"connection.html")      
         
         
 

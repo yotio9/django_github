@@ -17,14 +17,17 @@
         </div>
 
         <!-- Affichage des messages d'erreur Django -->
-        {% if error %}
-            <div class="error-message">
-                {{ error }}
-            </div>
-        {% endif %}
+       
 
-        <form method="POST" class="login-form">
+        <form method="POST"  action="{% url 'connection'%}" class="login-form">
             {% csrf_token %}
+           
+            {%if error%}
+            <div style=" color: red;  display: flex; align-self: center; margin-bottom: 20px;">
+            {{error}}
+            </div> 
+            {% endif %}
+       
             
             <div class="input-group">
                 <label for="username">Nom d'utilisateur</label>
